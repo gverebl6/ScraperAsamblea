@@ -54,6 +54,21 @@ def FileNameExtract(driver, url, pages_to_extract=1):
     
     return file_names
         
+def pdfDownloader(files):
+    for file in files:
+    #Obtener url segun el formato de la asamblea. 
+        file = file[:-4] + file[-4:].lower()
+        year = file[:4]
+        decade = int(year)-(int(year) % 10) 
+        url_pdf = f'https://www.asamblea.gob.pa/APPS/LEGISPAN/PDF_ACTAS/{decade}_ACTAS/{year}_ACTAS/{year}_ACTAS_PLENO/{file}'
+
+        raw_pdf = requests.get(url_pdf)
+        with open(f'pdfs/{file}', 'wb') as pdf:
+            pdf.write(raw_pdf.content)
+
+
+
+#-------------------Main------------------------
 
 #La pagina de la asamble tiene un iframe conteniendo el link real de la tabla. 
 url_tabla = getSoup('https://www.asamblea.gob.pa/actas-del-pleno').find('iframe').get('src')
@@ -61,9 +76,11 @@ url_tabla = getSoup('https://www.asamblea.gob.pa/actas-del-pleno').find('iframe'
 #Declarar el driver
 driver = DriverDefinition()
 
-file_names = FileNameExtract(driver, url_tabla, pages_to_extract=2)
+file_names = FileNameExtract(driver, url_tabla, pages_to_extract=1)
 
-print(file_names, len(file_names))
+#print(file_names, len(file_names))
+
+pdfDownloader(file_names)
 
 driver.close()
 
