@@ -36,7 +36,7 @@ def DriverDefinition():
 def FileNameExtract(driver, url, pages_to_extract=1):
     file_names = []
     #GET a la pagina con la lista
-    driver.get(url_tabla)
+    driver.get(url)
     
     
     #Extraer de todas las paginas
@@ -83,5 +83,3 @@ file_names = FileNameExtract(driver, url_tabla, pages_to_extract=1)
 pdfDownloader(file_names)
 
 driver.close()
-
-# #TODO: Extraer los pdfs
